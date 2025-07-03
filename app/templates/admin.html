@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% block title %}Admin | Restaurant App{% endblock %}
+{% block content %}
+<style>
+  /* Table and button styles */
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+  }
+  .admin-table th, .admin-table td {
+    border: 1px solid #ffe0b2;
+    padding: 0.7rem 0.5rem;
+    text-align: left;
+  }
+  .admin-table th {
+    background: #fff3e0;
+    color: #ff9800;
+    font-weight: 700;
+  }
+  .admin-table img {
+    max-width: 60px;
+    border-radius: 0.5rem;
+  }
+  .admin-actions button {
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.95rem;
+    color: #fff;
+    background: #ff9800;
+    transition: background 0.2s;
+  }
+  .admin-actions button.edit {
+    background: #4f46e5;
+  }
+  .admin-actions button.delete {
+    background: #ef4444;
+  }
+  .admin-actions button:hover {
+    opacity: 0.85;
+  }
+  /* Themed form styles for login/register/admin */
+  .themed-form {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px #ff980033;
+    padding: 2.2rem 2.5rem 2rem 2.5rem;
+    max-width: 420px;
+    margin: 3.5rem auto 2.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .themed-form h2 {
+    color: #ff9800;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+  .themed-form label {
+    font-weight: 600;
+    color: #ff9800;
+    margin-bottom: 0.3rem;
+    display: block;
+    text-align: left;
+    width: 100%;
+  }
+  .themed-form input[type="text"],
+  .themed-form input[type="password"],
+  .themed-form input[type="email"],
+  .themed-form input[type="number"],
+  .themed-form input[type="file"] {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 0.7rem;
+    border: 1.5px solid #ffd59e;
+    background: #fffdfa;
+    font-size: 1.08rem;
+    margin-bottom: 0.7rem;
+  }
+  .themed-form button[type="submit"] {
+    background: linear-gradient(90deg,#ff9800 0%,#ffb74d 100%);
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    padding: 0.7rem 1.7rem;
+    border: none;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 12px #ff980033;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
+  }
+  .themed-form .form-link {
+    margin-top: 1.1rem;
+    color: #ff9800;
+    font-size: 1rem;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+  }
+</style>
+<div class="admin-main-layout">
+  <div style="width:100%;max-width:900px;margin:0 auto 2.5rem auto;">
+    <div style="border-radius:1.5rem;background:linear-gradient(100deg,#ff9800 0%,#ffb74d 100%);box-shadow:0 6px 32px #ff980033;padding:2.2rem 2.5rem 2rem 2.5rem;display:flex;align-items:center;gap:2rem;min-height:120px;margin-bottom:2.2rem;">
+      <div style="flex:1;display:flex;flex-direction:column;gap:0.3rem;">
+        <div style="display:flex;align-items:center;width:100%;">
+          <span style="font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:1px;text-shadow:0 2px 8px #ff980055;flex:1;">Admin Panel - Manage Menu</span>
+        </div>
+        <div style="font-size:1.1rem;color:#fffde4;font-weight:500;letter-spacing:0.5px;">Add new menu items and manage your restaurant's offerings.</div>
+      </div>
+      <div style="width:90px;height:90px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px #ff980033;">
+        <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Taaza Kitchen Logo" style="width:60px;height:60px;object-fit:contain;border-radius:50%;">
+      </div>
+    </div>
+    <form class="admin-form" method="post" enctype="multipart/form-data" action="/admin/add" style="background:#fff; border-radius:1.2rem; box-shadow:0 4px 24px #ff980033; padding:2rem 2.5rem; width:100%; max-width:600px; margin:0 auto 2.5rem auto;">
+      <div style="display:flex; gap:2rem; flex-wrap:wrap;align-items:flex-end;">
+        <div style="flex:1; min-width:180px;">
+          <label for="name" style="font-weight:600;color:#ff9800;">Name</label>
+          <input type="text" id="name" name="name" required style="width:100%;padding:0.6rem 0.8rem;border-radius:0.7rem;border:1.5px solid #ffd59e;background:#fffdfa;font-size:1.08rem;margin-top:0.3rem;">
+        </div>
+        <div style="flex:1; min-width:120px;">
+          <label for="price" style="font-weight:600;color:#ff9800;">Price (₹)</label>
+          <input type="number" id="price" name="price" min="1" required style="width:100%;padding:0.6rem 0.8rem;border-radius:0.7rem;border:1.5px solid #ffd59e;background:#fffdfa;font-size:1.08rem;margin-top:0.3rem;">
+        </div>
+        <div style="flex:1; min-width:180px;">
+          <label for="image" style="font-weight:600;color:#ff9800;">Image</label>
+          <input type="file" id="image" name="image" accept="image/*" required style="width:100%;padding:0.6rem 0.8rem;border-radius:0.7rem;border:1.5px solid #ffd59e;background:#fffdfa;font-size:1.08rem;margin-top:0.3rem;">
+        </div>
+        <div style="display:flex; align-items:end;">
+          <button type="submit" style="margin-top:1.7rem;background:linear-gradient(90deg,#ff9800 0%,#ffb74d 100%);color:#fff;font-size:1.13rem;font-weight:700;padding:0.7rem 1.7rem;border:none;border-radius:0.7rem;box-shadow:0 2px 12px #ff980033;cursor:pointer;letter-spacing:0.5px;">Add Item</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div style="width:100%; max-width:900px; margin:0 auto 2.5rem auto;">
+    <div style="border-radius:1.2rem;background:#fffdfa;box-shadow:0 4px 24px #ff980033;padding:2rem 2.5rem 1.5rem 2.5rem;">
+      <div style="font-size:1.35rem;font-weight:800;color:#ff9800;letter-spacing:0.5px;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.7rem;">
+        <i class="bi bi-list" style="font-size:1.5rem;color:#ff9800;"></i> Menu Items
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;">
+        {% for item in menu_items %}
+        <div style="background:#fff;border-radius:1.1rem;box-shadow:0 2px 8px #ffd59e44;padding:1.1rem 1.1rem 1rem 1.1rem;display:flex;flex-direction:column;align-items:flex-start;gap:0.7rem;position:relative;">
+          <div style="display:flex;align-items:center;gap:1.1rem;width:100%;">
+            <img src="{{ item.image_url }}" alt="{{ item.name }}" style="width:68px;height:68px;object-fit:cover;border-radius:0.9rem;box-shadow:0 2px 8px #ffe0b2;">
+            <div style="flex:1;display:flex;flex-direction:column;gap:0.2rem;">
+              <div style="font-size:1.13rem;font-weight:800;color:#ff9800;">{{ item.name }}</div>
+              <div style="color:#ffb74d;font-weight:700;font-size:1.05rem;">₹{{ item.price }}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.7rem;margin-top:0.5rem;">
+            <form method="post" action="/admin/edit/{{ item.item_id }}" style="display:inline;">
+              <button type="submit" class="edit" style="background:#4f46e5;color:#fff;border:none;border-radius:0.5rem;padding:0.3rem 1.1rem;font-weight:600;box-shadow:0 1px 4px #e0e0e0;">Edit</button>
+            </form>
+            <form method="post" action="/admin/delete/{{ item.item_id }}" style="display:inline;">
+              <button type="submit" class="delete" style="background:#ef4444;color:#fff;border:none;border-radius:0.5rem;padding:0.3rem 1.1rem;font-weight:600;box-shadow:0 1px 4px #e0e0e0;">Delete</button>
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div style="width:100%; max-width:900px; background:#fff; border-radius:1.2rem; box-shadow:0 4px 24px #ff980033; padding:2rem 2.5rem; margin: 0 auto 2.5rem auto; text-align:center;">
+    <h4 style="color:#ff9800;font-weight:700;margin-bottom:1.2rem;text-align:center;">Orders</h4>
+    <table class="admin-table" style="margin: 0 auto; text-align:center;">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Username</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td style="font-weight:600; color:#4f46e5;">{{ order.order_id }}</td>
+          <td style="font-weight:600; color:#ff9800;">{{ order.username }}</td>
+          <td>
+            <ul style="padding-left:1.1rem;margin:0;">
+              {% for item in order['items'] %}
+                <li>{{ item.name }} x{{ item.qty }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td style="font-weight:600;">₹{{ order.total }}</td>
+          <td>
+            {% if order.status == 'received' %}
+              <span style="font-weight:600;color:#7ac142;background:#f5f5f5;padding:0.2rem 0.7rem;border-radius:0.5rem;">{{ order.status|capitalize }}</span>
+            {% else %}
+              <span style="font-weight:600;color:#888;background:#f5f5f5;padding:0.2rem 0.7rem;border-radius:0.5rem;">{{ order.status|capitalize }}</span>
+            {% endif %}
+          </td>
+          <td style="font-size:0.95rem;">{{ order.order_time.split('T')[0] }}<br>{{ order.order_time.split('T')[1][:8] }}</td>
+          <td>
+            {% if order.status == 'received' %}
+            <form method="post" action="/admin/order_status/{{ order.order_id }}" style="display:inline;">
+              <input type="hidden" name="status" value="closed">
+              <button type="submit" style="background:#7ac142;color:#fff;border:none;border-radius:0.5rem;padding:0.3rem 1.1rem;font-weight:600;">Close</button>
+            </form>
+            {% else %}
+              <span style="color:#888;font-size:0.95rem;">Closed</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

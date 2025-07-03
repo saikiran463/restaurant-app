@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Order Placed | Restaurant App{% endblock %}
+{% block content %}
+<style>
+  .order-placed-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fff7f0 0%, #ffe7d1 100%);
+    padding: 0;
+  }
+  .order-placed-card {
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 #ff980033;
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .order-placed-card .checkmark {
+    font-size: 3.5rem;
+    color: #7ac142;
+    margin-bottom: 1.2rem;
+    animation: pop 0.6s cubic-bezier(.68,-0.55,.27,1.55);
+  }
+  @keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    80% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .order-placed-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff9800;
+    margin-bottom: 0.7rem;
+  }
+  .order-placed-desc {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  .order-id {
+    background: #fff3e0;
+    color: #ff9800;
+    font-weight: 600;
+    border-radius: 0.7rem;
+    padding: 0.4rem 1.2rem;
+    margin-bottom: 1.2rem;
+    display: inline-block;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+  }
+  .order-placed-btn {
+    background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    padding: 0.7rem 2.2rem;
+    font-size: 1.1rem;
+    margin-top: 1.2rem;
+    box-shadow: 0 2px 8px #ff980033;
+    transition: background 0.2s;
+  }
+  .order-placed-btn:hover {
+    background: linear-gradient(90deg, #ffb74d 0%, #ff9800 100%);
+  }
+</style>
+<div class="order-placed-container">
+  <div class="order-placed-card">
+    <div class="checkmark">&#10004;</div>
+    <div class="order-placed-title">Order Placed! Thank you </div>
+    <div class="order-placed-desc">Your delicious food is being prepared.</div>
+    <div class="order-id">Order ID: {{ order_id }}</div>
+    <a href="/menu" class="order-placed-btn">Back to Menu</a>
+  </div>
+</div>
+{% endblock %}

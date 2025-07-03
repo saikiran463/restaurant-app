@@ -1,0 +1,673 @@
+{% extends 'base.html' %}
+{% block title %}Menu | Restaurant App{% endblock %}
+{% block content %}
+<style>
+  /* Remove .container restriction for menu page */
+  .container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    min-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  html, body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    background: #faf7f3;
+    min-height: 100vh;
+    min-width: 100vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden !important;
+  }
+  .menu-main-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    background: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  .menu-sidebar {
+    width: 70px;
+    min-width: 70px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0 1rem 0;
+    /* border-right removed */
+    gap: 2rem;
+    box-shadow: 2px 0 12px #ffe0c2aa;
+  }
+  .menu-sidebar i {
+    font-size: 1.7rem;
+    color: #ff9800;
+    margin: 1.2rem 0;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .menu-sidebar i.active, .menu-sidebar i:hover {
+    color: #ff5722;
+  }
+  .menu-content-area {
+    flex: 1;
+    padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+    background: #fff;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  .menu-search-bar {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px #eee;
+    padding: 0.7rem 1.2rem;
+    margin-bottom: 1.2rem;
+    gap: 1rem;
+    border: 1.5px solid #f5e2d6;
+    max-width: 600px;
+    width: 100%;
+  }
+  .menu-search-bar input {
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    flex: 1;
+    background: transparent;
+    color: #333;
+  }
+  .menu-search-bar button {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: #ff9800;
+    cursor: pointer;
+    padding: 0 0.5rem;
+    transition: color 0.2s;
+  }
+  .menu-search-bar button:hover {
+    color: #ff5722;
+  }
+  .menu-hero {
+    width: 100%;
+    border-radius: 1.5rem;
+    background: linear-gradient(100deg, #ff9800 0%, #ffb74d 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 2.2rem 2.5rem;
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin-bottom: 2.2rem;
+    gap: 2.5rem;
+    box-shadow: 0 6px 32px #ff980033;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+  }
+  .menu-hero-logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 24px #ff980033;
+    margin-right: 2.2rem;
+    flex-shrink: 0;
+  }
+  .menu-hero-logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+  .menu-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .menu-hero-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+    text-shadow: 0 2px 8px #ff980055;
+  }
+  .menu-hero-tagline {
+    font-size: 1.15rem;
+    color: #fffde4;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+  }
+  .menu-nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1.5rem 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ff9800;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+  .menu-nav-tabs .tab {
+    cursor: pointer;
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    transition: background 0.2s, color 0.2s;
+    color: #ff9800;
+    border: none;
+    background: none;
+    outline: none;
+    position: relative;
+  }
+  .menu-nav-tabs .tab.active, .menu-nav-tabs .tab:hover {
+    color: #ff5722;
+    font-weight: 700;
+  }
+  .menu-nav-tabs .tab.active::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: #ff9800;
+    border-radius: 2px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  .menu-card {
+    background: #fffdfa;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 18px 0 #ff980033, 0 1.5px 6px 0 #ffd59e44;
+    overflow: hidden;
+    transition: box-shadow 0.18s, transform 0.13s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    max-width: 270px;
+    margin: 0 auto;
+    border: 1.5px solid #ffd59e;
+    position: relative;
+  }
+  .menu-card:hover {
+    box-shadow: 0 8px 32px 0 #ff980055;
+    transform: translateY(-5px) scale(1.04);
+  }
+  .menu-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    border-bottom: 1px solid #ffd59e;
+    background: #fff7e6;
+  }
+  .menu-card .card-body {
+    padding: 1.1rem 1.1rem 0.9rem 1.1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    background: #fff;
+  }
+  .menu-card .fw-bold {
+    color: #7ac142;
+    font-size: 1.18rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    display: block;
+    letter-spacing: 0.5px;
+  }
+  .menu-card .card-title {
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 0.2rem;
+    font-size: 1.13rem;
+    margin-top: 0.2rem;
+    letter-spacing: 0.2px;
+  }
+  .menu-card .cart-btn {
+    background: #fff;
+    border: 1.5px solid #7ac142;
+    color: #7ac142;
+    border-radius: 0.25rem;
+    font-size: 1.25rem;
+    padding: 0.18rem 0.7rem;
+    margin-top: 0.7rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    align-self: flex-end;
+    box-shadow: 0 1px 4px #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-card .cart-btn:hover {
+    background: #7ac142;
+    color: #fff;
+    border-color: #7ac142;
+  }
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    .menu-main-layout {
+      flex-direction: column;
+      min-height: unset;
+      width: 100vw;
+    }
+    .menu-sidebar {
+      flex-direction: row;
+      width: 100vw;
+      min-width: unset;
+      border-radius: 0 0 2rem 2rem;
+      box-shadow: 0 2px 16px 0 #fbbf24aa;
+      padding: 1rem 0;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .menu-content-area {
+      padding: 1.5rem 1rem 1.5rem 1rem;
+    }
+  }
+  @media (max-width: 900px) {
+    .menu-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+    .menu-hero {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.2rem 1rem;
+      gap: 1rem;
+    }
+  }
+  @media (max-width: 600px) {
+    .menu-main-layout {
+      flex-direction: column;
+      width: 100vw;
+    }
+    .menu-sidebar {
+      width: 100vw;
+      min-width: unset;
+      border-radius: 0 0 1.2rem 1.2rem;
+      padding: 0.7rem 0;
+      gap: 1.2rem;
+    }
+    .menu-content-area {
+      padding: 0.7rem 0.3rem 0.7rem 0.3rem;
+    }
+    .menu-hero {
+      padding: 0.7rem 0.5rem;
+      font-size: 1.1rem;
+    }
+    .menu-search-bar {
+      max-width: 100vw;
+      padding: 0.4rem 0.5rem;
+    }
+    .menu-card img {
+      height: 80px;
+    }
+  }
+</style>
+<div class="menu-main-layout">
+  <!-- Sidebar -->
+  <div class="menu-sidebar">
+    <i class="bi bi-list"></i>
+    <a href="/menu" title="Home" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;"><i class="bi bi-house-door"></i></a>
+    <button id="contactBtn" title=" User Profile" style="background:none;border:none;padding:0;margin:0;display:flex;align-items:center;justify-content:center;width:40px;height:40px;cursor:pointer;">
+      <i class="bi bi-person"></i>
+    </button>
+  <!-- User Details Modal -->
+  <div id="userDetailsModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:10001;align-items:center;justify-content:center;">
+    <div style="background:#fff;padding:2.2rem 2.2rem 1.5rem 2.2rem;border-radius:1.2rem;min-width:320px;max-width:90vw;box-shadow:0 4px 24px #e0e0e0;position:relative;">
+      <button id="closeUserDetailsModal" style="position:absolute;top:12px;right:18px;background:none;border:none;font-size:2rem;cursor:pointer;color:#ff9800;">&times;</button>
+      <div style="font-size:1.3rem;font-weight:700;margin-bottom:1.2rem;text-align:center;color:#ff9800;">User Details</div>
+      <div id="userDetailsContent" style="font-size:1.1rem;color:#444;text-align:center;"></div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var contactBtn = document.getElementById('contactBtn');
+      var userDetailsModal = document.getElementById('userDetailsModal');
+      var closeUserDetailsModal = document.getElementById('closeUserDetailsModal');
+      var userDetailsContent = document.getElementById('userDetailsContent');
+      if (contactBtn && userDetailsModal && closeUserDetailsModal && userDetailsContent) {
+        contactBtn.onclick = function() {
+          fetch('/user_details', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                userDetailsContent.innerHTML = `<b>Username:</b> ${data.username}`;
+              } else {
+                userDetailsContent.innerHTML = `<span style='color:#e53935;'>Not logged in.</span>`;
+              }
+              userDetailsModal.style.display = 'flex';
+            })
+            .catch(() => {
+              userDetailsContent.innerHTML = `<span style='color:#e53935;'>Failed to fetch user details.</span>`;
+              userDetailsModal.style.display = 'flex';
+            });
+        };
+        closeUserDetailsModal.onclick = function() {
+          userDetailsModal.style.display = 'none';
+        };
+        userDetailsModal.onclick = function(e) {
+          if (e.target === userDetailsModal) userDetailsModal.style.display = 'none';
+        };
+      }
+    });
+  </script>
+    <button id="orderHistoryBtn" title="Order History" style="margin-top:1.5rem;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#fff7e6;border-radius:50%;box-shadow:0 2px 8px #ffd59e44;border:none;cursor:pointer;outline:none;">
+      <i class="bi bi-clock-history" style="font-size:1.5rem;color:#ff9800;"></i>
+    </button>
+    <a href="/login" title="Logout" style="margin-top:2rem;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:#fff7e6;border-radius:50%;box-shadow:0 2px 8px #ffd59e44;text-decoration:none;">
+      <i class="bi bi-box-arrow-right" style="font-size:1.5rem;color:#ff9800;"></i>
+    </a>
+  </div>
+  <!-- Order History Sidebar (hidden by default) -->
+  <div id="orderHistorySidebar" style="display:none;position:fixed;top:0;left:0;width:370px;max-width:95vw;height:100vh;background:linear-gradient(120deg,#fff7e6 60%,#ffe7d1 100%);box-shadow:8px 0 32px #ff980033;z-index:9999;padding:2.2rem 1.7rem 1.7rem 1.7rem;overflow-y:auto;transition:left 0.3s;border-top-right-radius:2rem;border-bottom-right-radius:2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+      <span style="font-size:1.45rem;font-weight:800;color:#ff9800;letter-spacing:0.5px;">Order History</span>
+      <button id="closeOrderHistoryBtn" style="background:none;border:none;font-size:2rem;cursor:pointer;color:#4f46e5;">&times;</button>
+    </div>
+    <div id="orderHistoryContent">
+      <div style="color:#888;text-align:center;margin-top:2rem;">No order history yet.</div>
+    </div>
+  </div>
+
+{% block order_history_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var orderHistoryBtn = document.getElementById('orderHistoryBtn');
+    var orderHistorySidebar = document.getElementById('orderHistorySidebar');
+    var closeOrderHistoryBtn = document.getElementById('closeOrderHistoryBtn');
+    var orderHistoryContent = document.getElementById('orderHistoryContent');
+    if (orderHistoryBtn && orderHistorySidebar && closeOrderHistoryBtn && orderHistoryContent) {
+      orderHistoryBtn.onclick = function() {
+        orderHistorySidebar.style.display = 'block';
+        // Fetch order history
+        fetch('/order_history', { credentials: 'include' })
+          .then(res => res.json())
+          .then(data => {
+            const orders = data.orders || [];
+            if (orders.length === 0) {
+              orderHistoryContent.innerHTML = '<div style="color:#888;text-align:center;margin-top:2rem;">No order history yet.</div>';
+            } else {
+              orderHistoryContent.innerHTML = orders.map(order => `
+                <div style="background:#fff;border-radius:1rem;box-shadow:0 2px 8px #ffe0c2;padding:1.1rem 1.2rem;margin-bottom:1.2rem;">
+                  <div style="font-weight:700;color:#444;font-size:1.1rem;margin-bottom:0.3rem;">Order ID: ${order.order_id}</div>
+                  <div style="font-size:0.98rem;color:#444;margin-bottom:0.4rem;">${order.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
+                  <div style="font-size:0.98rem;color:#444;">Total: ₹${order.total}</div>
+                  <div style="font-size:0.93rem;color:#888;margin-top:0.2rem;">${order.order_time ? new Date(order.order_time).toLocaleString() : ''}</div>
+                  <div style="font-size:0.93rem;color:#888;margin-top:0.2rem;">Status: ${order.status}</div>
+                </div>
+              `).join('');
+            }
+          })
+          .catch(() => {
+            orderHistoryContent.innerHTML = '<div style="color:#888;text-align:center;margin-top:2rem;">Failed to load order history.</div>';
+          });
+      };
+      closeOrderHistoryBtn.onclick = function() {
+        orderHistorySidebar.style.display = 'none';
+      };
+    }
+  });
+</script>
+{% endblock %}
+  <!-- Main Content -->
+  <div class="menu-content-area">
+    <form class="menu-search-bar mb-4" style="box-shadow:0 4px 12px #eee;max-width:700px;width:100%;margin:0 auto 1.5rem auto;display:flex;align-items:center;gap:1rem;background:#fff;border-radius:1rem;padding:0.7rem 1.2rem;">
+      <i class="bi bi-search" style="font-size:1.3rem;color:#aaa;"></i>
+      <input type="text" placeholder="What would you like to eat?" aria-label="Search" style="flex:1;border:none;outline:none;font-size:1.1rem;background:transparent;color:#333;">
+      <i class="bi bi-list" style="font-size:1.5rem;color:#aaa;cursor:pointer;"></i>
+    </form>
+    <div class="menu-hero">
+      <div class="menu-hero-logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Taaza Kitchen Logo">
+      </div>
+      <div class="menu-hero-content">
+        <div class="menu-hero-title">Taaza Kitchen</div>
+        <div class="menu-hero-tagline">Fresh. Delicious. Delivered with love.</div>
+      </div>
+    </div>
+    <!-- Removed nav tabs -->
+    <div class="menu-grid" style="grid-template-columns:repeat(4,1fr);gap:2.2rem 2.2rem;">
+      {% for item in menu_items %}
+      <div class="menu-card" data-item='{{ {"id": item.id if item.id is defined else "", "name": item.name if item.name is defined else "", "price": item.price if item.price is defined else 0, "image_url": item.image_url if item.image_url is defined else ""}|tojson }}' style="border-radius:1.2rem;box-shadow:0 2px 8px #e0e0e0,0 1.5px 6px #b6b6b6;overflow:hidden;position:relative;height:320px;width:100%;display:flex;flex-direction:column;cursor:pointer;">
+        <div style="position:relative;width:100%;height:200px;flex-shrink:0;">
+          <img src="{{ item.image_url }}" alt="{{ item.name }}" style="width:100%;height:200px;object-fit:cover;border-radius:1.2rem 1.2rem 0 0;display:block;">
+          <span style="position:absolute;top:12px;right:14px;background:#fff;border-radius:50%;box-shadow:0 2px 8px #e0e0e0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
+            <i class="bi bi-heart-fill" style="color:#ff6d1b;font-size:1.3rem;"></i>
+          </span>
+        </div>
+        <div class="card-body" style="padding:0 1.1rem 0.7rem 1.1rem;display:flex;flex-direction:column;align-items:flex-start;gap:0;flex:1;min-height:0;">
+          <div style="width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:0.38rem;">
+            <div class="card-title" style="font-size:1.18rem;font-weight:700;color:#222;letter-spacing:0.2px;">{{ item.name }}</div>
+            <span class="fw-bold" style="color:#ff9800;font-size:1.22rem;font-weight:700;background:#fff7e6;padding:0.18rem 0.7rem;border-radius:0.5rem;box-shadow:0 1px 4px #ffe0c2;">₹{{ item.price }}</span>
+          </div>
+          <!-- Quantity controls removed as per request -->
+        </div>
+      </div>
+      {% endfor %}
+    </div> <!-- close menu-grid -->
+
+    <!-- Cart Sidebar (hidden by default) -->
+    <div id="cartSidebar" style="display:none;position:fixed;top:0;right:0;width:370px;max-width:95vw;height:100vh;background:linear-gradient(120deg,#fff7e6 60%,#ffe7d1 100%);box-shadow:-8px 0 32px #ff980033;z-index:9999;padding:2.2rem 1.7rem 1.7rem 1.7rem;overflow-y:auto;transition:right 0.3s;border-top-left-radius:2rem;border-bottom-left-radius:2rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <span style="font-size:1.45rem;font-weight:800;color:#ff9800;letter-spacing:0.5px;">My Order</span>
+        <button id="closeCartBtn" style="background:none;border:none;font-size:2rem;cursor:pointer;color:#ff9800;">&times;</button>
+      </div>
+      <div id="cartItems"></div>
+      <button id="checkoutBtn" style="width:100%;margin-top:1.5rem;background:linear-gradient(90deg,#ff9800 0%,#ffb74d 100%);color:#fff;font-size:1.18rem;font-weight:800;padding:0.8rem 0;border:none;border-radius:0.9rem;box-shadow:0 2px 12px #ff980033;cursor:pointer;letter-spacing:0.5px;">Checkout</button>
+    </div>
+<script>
+// Cart Sidebar logic with multi-item support and live quantity sync
+document.addEventListener('DOMContentLoaded', function() {
+  let cart = {};
+
+  // Helper to update cart sidebar
+  function updateCartSidebar() {
+    const sidebar = document.getElementById('cartSidebar');
+    const cartItems = document.getElementById('cartItems');
+    let total = 0;
+    let html = '';
+    Object.entries(cart).forEach(([cartKey, item]) => {
+      total += item.price * item.qty;
+      html += `
+        <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem;background:#fff;border-radius:1.1rem;box-shadow:0 2px 8px #ffd59e44;padding:0.7rem 0.7rem 0.7rem 0.7rem;">
+          <img src="${item.image_url}" alt="${item.name}" style="width:68px;height:68px;object-fit:cover;border-radius:0.9rem;box-shadow:0 2px 8px #ffe0b2;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:0.2rem;">
+            <div style="font-size:1.13rem;font-weight:800;color:#ff9800;">${item.name}</div>
+            <div style="color:#ffb74d;font-weight:700;font-size:1.05rem;">₹${item.price}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <button class="cart-qty-btn" data-cartkey="${cartKey}" data-action="-" style="background:#fff7e6;border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#ff9800;cursor:pointer;box-shadow:0 1px 4px #ffd59e44;">−</button>
+            <span style="font-size:1.13rem;font-weight:800;min-width:24px;text-align:center;color:#4f46e5;">${item.qty}</span>
+            <button class="cart-qty-btn" data-cartkey="${cartKey}" data-action="+" style="background:#fff7e6;border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#ff9800;cursor:pointer;box-shadow:0 1px 4px #ffd59e44;">+</button>
+          </div>
+        </div>
+      `;
+    });
+    html += `<div style="font-size:1.22rem;font-weight:800;text-align:right;color:#ff9800;margin-top:1.2rem;">Total: ₹${total}</div>`;
+    cartItems.innerHTML = html;
+    sidebar.style.display = Object.keys(cart).length ? 'block' : 'none';
+
+    // Add event listeners for cart quantity buttons
+    cartItems.querySelectorAll('.cart-qty-btn').forEach(btn => {
+      btn.onclick = function(e) {
+        const cartKey = btn.getAttribute('data-cartkey');
+        const action = btn.getAttribute('data-action');
+        if (cart[cartKey]) {
+          if (action === '-') {
+            cart[cartKey].qty--;
+            if (cart[cartKey].qty <= 0) {
+              delete cart[cartKey];
+            }
+          } else if (action === '+') {
+            cart[cartKey].qty++;
+          }
+          updateCardQty(cartKey, cart[cartKey] ? cart[cartKey].qty : 0);
+          updateCartSidebar();
+        }
+      };
+    });
+  }
+
+  // Helper to update the card's quantity display if present
+  function updateCardQty(id, qty) {
+    document.querySelectorAll('.menu-card').forEach(function(card) {
+      const item = JSON.parse(card.getAttribute('data-item'));
+      if (String(item.id) === String(id)) {
+        const qtyValue = card.querySelector('.qty-value');
+        if (qtyValue) qtyValue.textContent = qty;
+      }
+    });
+  }
+
+  // Card click logic: add/increment item in cart and show sidebar
+  document.querySelectorAll('.menu-card').forEach(function(card) {
+    const item = JSON.parse(card.getAttribute('data-item'));
+    // Use item.id if present, else fallback to item.name as key
+    const cartKey = item.id && String(item.id).length > 0 ? String(item.id) : item.name;
+    card.addEventListener('click', function(e) {
+      // If already in cart, increment qty, else add with qty 1
+      if (cart[cartKey]) {
+        cart[cartKey].qty++;
+      } else {
+        cart[cartKey] = { ...item, qty: 1 };
+      }
+      updateCartSidebar();
+    });
+  });
+
+  // Close cart sidebar
+  document.getElementById('closeCartBtn').onclick = function() {
+    document.getElementById('cartSidebar').style.display = 'none';
+  };
+
+  // Checkout logic
+  document.getElementById('checkoutBtn').onclick = function() {
+    if (Object.keys(cart).length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    // Prepare order data
+    const orderItems = Object.values(cart).map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      qty: item.qty,
+      image_url: item.image_url
+    }));
+    const total = orderItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+    // Send order to backend
+    fetch('/place_order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: orderItems, total: total }),
+      credentials: 'include' // Ensure session cookie is sent
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showBillModal(orderItems, total, data.order_id);
+        cart = {};
+        updateCartSidebar();
+      } else {
+        alert('Order failed. Please try again.');
+      }
+    })
+    .catch(() => alert('Order failed. Please try again.'));
+  };
+
+  // Bill modal
+  function showBillModal(items, total, orderId) {
+    let modal = document.getElementById('billModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'billModal';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.background = 'rgba(0,0,0,0.35)';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '10000';
+      document.body.appendChild(modal);
+    }
+    let html = `<div style="background:#fff;padding:2.2rem 2.2rem 1.5rem 2.2rem;border-radius:1.2rem;min-width:320px;max-width:90vw;box-shadow:0 4px 24px #e0e0e0;">
+      <div style='font-size:1.3rem;font-weight:700;margin-bottom:1.2rem;text-align:center;'>Order Placed!</div>
+      <div style='margin-bottom:1.1rem;'>Order ID: <b>${orderId}</b></div>
+      <div style='margin-bottom:1.1rem;'>
+        <table style='width:100%;border-collapse:collapse;'>
+          <tr><th style='text-align:left;'>Item</th><th>Qty</th><th>Price</th></tr>`;
+    items.forEach(item => {
+      html += `<tr><td>${item.name}</td><td style='text-align:center;'>${item.qty}</td><td style='text-align:right;'>₹${item.price * item.qty}</td></tr>`;
+    });
+    html += `</table></div>
+      <div style='font-size:1.15rem;font-weight:700;text-align:right;margin-bottom:1.2rem;'>Total: ₹${total}</div>
+      <button id='closeBillModal' style='background:#ff9800;color:#fff;font-size:1.1rem;font-weight:700;padding:0.5rem 1.5rem;border:none;border-radius:0.5rem;cursor:pointer;display:block;margin:0 auto;'>Close</button>
+    </div>`;
+    modal.innerHTML = html;
+    modal.onclick = function(e) {
+      if (e.target.id === 'billModal' || e.target.id === 'closeBillModal') {
+        modal.style.display = 'none';
+      }
+    };
+    modal.style.display = 'flex';
+  }
+});
+</script>
+    </div>
+  </div>
+  <!-- Cart/Order Panel: Only show if cart_items exist -->
+  {% if cart_items and cart_items|length > 0 %}
+  <div class="menu-cart-panel">
+    <div class="cart-title">My Orders</div>
+    {% for cart in cart_items %}
+    <div class="cart-item">
+      <img src="{{ cart.image_url }}" alt="{{ cart.name }}">
+      <div class="cart-item-details">
+        <div class="cart-item-title">{{ cart.name }}</div>
+        <div class="cart-item-price">₹{{ cart.price }}</div>
+      </div>
+      <div>x{{ cart.quantity }}</div>
+    </div>
+    {% endfor %}
+    <div class="cart-summary">
+      <span>Total</span>
+      <span>₹{{ cart_total }}</span>
+    </div>
+    <button class="checkout-btn">Checkout</button>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var usernameInput = document.getElementById('username');
+    var passwordInput = document.getElementById('password');
+    function hideAlerts() {
+      document.querySelectorAll('.alert.alert-danger').forEach(function(el) {
+        el.style.display = 'none';
+      });
+    }
+    if (usernameInput) {
+      usernameInput.addEventListener('focus', hideAlerts);
+    }
+    if (passwordInput) {
+      passwordInput.addEventListener('focus', hideAlerts);
+    }
+  });
+</script>
+{% extends 'base.html' %}
+{% block title %}Admin Login | Restaurant App{% endblock %}
+{% block content %}
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #fff7e6 0%, #ffe7d1 100%);
+    min-height: 100vh;
+  }
+  .fullscreen-center {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .themed-form {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px #ff980033;
+    padding: 2.7rem 2.7rem 2.2rem 2.7rem;
+    min-width: 340px;
+    max-width: 480px;
+    margin: 3.5rem auto 2.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .themed-form h2 {
+    color: #ff9800;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
+  }
+  .themed-form label {
+    font-weight: 600;
+    color: #ff9800;
+    margin-bottom: 0.3rem;
+    display: block;
+    text-align: left;
+    width: 100%;
+  }
+  .themed-form input[type="text"],
+  .themed-form input[type="password"],
+  .themed-form input[type="email"],
+  .themed-form input[type="number"],
+  .themed-form input[type="file"] {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 0.7rem;
+    border: 1.5px solid #ffd59e;
+    background: #fffdfa;
+    font-size: 1.08rem;
+    margin-bottom: 0.7rem;
+  }
+  .themed-form button[type="submit"] {
+    background: linear-gradient(90deg,#ff9800 0%,#ffb74d 100%);
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 700;
+    padding: 0.7rem 1.7rem;
+    border: none;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 12px #ff980033;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
+  }
+</style>
+{% set login_errors = [] %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'danger' %}
+        {% set _ = login_errors.append(message) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div class="fullscreen-center">
+  <form class="themed-form" method="post">
+    <h2>Admin Login</h2>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+    {% if login_errors|length > 0 %}
+      {% for err in login_errors %}
+        <div class="alert alert-danger" style="margin-bottom:0.5rem; padding:0.4rem 0.8rem; font-size:0.97rem;">{{ err }}</div>
+      {% endfor %}
+    {% endif %}
+    <button type="submit">Login</button>
+  </form>
+</div>
+{% endblock %}

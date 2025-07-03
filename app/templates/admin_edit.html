@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Edit Menu Item | Restaurant App{% endblock %}
+{% block content %}
+<style>
+  .admin-container {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #fff7f0 0%, #ffe7d1 100%);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 3.5rem 0 3.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .admin-title {
+    font-weight: 700;
+    color: #ff9800;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .admin-form label {
+    color: #ff9800;
+    font-weight: 500;
+  }
+  .admin-form input, .admin-form select {
+    border-radius: 0.75rem;
+    border: 1px solid #ffd59e;
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+  }
+  .admin-form input[type="file"] {
+    border: none;
+    margin-bottom: 1rem;
+  }
+  .admin-form button {
+    background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+    border: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    padding: 0.5rem 2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    transition: background 0.2s;
+  }
+  .admin-form button:hover {
+    background: linear-gradient(90deg, #ffb74d 0%, #ff9800 100%);
+  }
+</style>
+<div class="admin-container">
+  <h2 class="admin-title" style="font-size:2.2rem; margin-bottom:2.5rem;">Edit Menu Item</h2>
+  <form class="admin-form" method="post" enctype="multipart/form-data" style="background:#fff; border-radius:1.2rem; box-shadow:0 4px 24px #ff980033; padding:2rem 2.5rem; width:100%; max-width:600px; margin-bottom:2.5rem;">
+    <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+      <div style="flex:1; min-width:180px;">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="{{ item.name }}" required>
+      </div>
+      <div style="flex:1; min-width:120px;">
+        <label for="price">Price (₹)</label>
+        <input type="number" id="price" name="price" min="1" value="{{ item.price }}" required>
+      </div>
+      <div style="flex:1; min-width:180px;">
+        <label for="image">Image (leave blank to keep current)</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        {% if item.image_url %}
+        <img src="{{ item.image_url }}" alt="Current Image" style="max-width:100px;margin-top:10px;box-shadow:0 2px 8px #ff980033;border-radius:0.5rem;">
+        {% endif %}
+      </div>
+      <div style="display:flex; align-items:end;">
+        <button type="submit" style="margin-top:1.7rem;">Update Item</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

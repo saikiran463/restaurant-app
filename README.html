@@ -1,0 +1,153 @@
+<!--
+    This is the latest, enhanced version of the Restaurant App documentation.
+    If you see any duplicate or old content below, please remove it and keep only this version.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant App - Professional Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f6fa; color: #222; }
+        .container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 12px #0001; padding: 2.5rem 2.5rem 2rem 2.5rem; }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        h2 { margin-top: 2.5rem; border-bottom: 2px solid #eee; padding-bottom: 0.3rem; }
+        .icon { color: #27ae60; margin-right: 0.5rem; }
+        ul { margin-bottom: 1.5rem; }
+        code, pre { background: #f3f3f3; padding: 2px 8px; border-radius: 3px; font-size: 1rem; }
+        .feature-list li { margin-bottom: 0.7rem; }
+        .tech-list { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem; }
+        .tech-item { background: #f9fafb; border-radius: 8px; padding: 0.7rem 1.2rem; box-shadow: 0 1px 4px #0001; display: flex; align-items: center; gap: 0.7rem; }
+        .section { margin-bottom: 2.5rem; }
+        .steps { background: #f7f7fa; border-left: 4px solid #27ae60; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+        .steps li { margin-bottom: 0.8rem; }
+        .callout { background: #eafaf1; border-left: 4px solid #27ae60; padding: 1rem 1.5rem; border-radius: 8px; margin: 2rem 0; }
+        .footer { text-align: center; color: #888; margin-top: 3rem; font-size: 1rem; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1><i class="fa-solid fa-utensils icon"></i>Restaurant App</h1>
+    <p style="font-size:1.2rem;">A modern, cloud-native restaurant management platform built with Flask, AWS, and Docker. <br>Seamlessly manage menus, orders, and notifications with a beautiful UI and robust backend.</p>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-bolt icon"></i> Key Features</h2>
+        <ul class="feature-list">
+            <li><i class="fa-solid fa-user-plus icon"></i> Secure user registration & login with strong password policies</li>
+            <li><i class="fa-solid fa-book-open icon"></i> Dynamic menu browsing with images (AWS S3)</li>
+            <li><i class="fa-solid fa-cart-shopping icon"></i> Real-time order placement and order history</li>
+            <li><i class="fa-solid fa-user-shield icon"></i> Admin panel for menu and order management</li>
+            <li><i class="fa-solid fa-bell icon"></i> Instant order notifications via AWS SNS</li>
+            <li><i class="fa-solid fa-shield-halved icon"></i> Robust error handling and session security</li>
+            <li><i class="fa-solid fa-mobile-screen icon"></i> Responsive, user-friendly UI with modals and AJAX</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-cubes icon"></i> Technologies Used</h2>
+        <div class="tech-list">
+            <div class="tech-item"><i class="fa-brands fa-python icon"></i>Flask (Python)</div>
+            <div class="tech-item"><i class="fa-brands fa-aws icon"></i>AWS DynamoDB</div>
+            <div class="tech-item"><i class="fa-brands fa-aws icon"></i>AWS S3</div>
+            <div class="tech-item"><i class="fa-brands fa-aws icon"></i>AWS SNS</div>
+            <div class="tech-item"><i class="fa-brands fa-docker icon"></i>Docker</div>
+            <div class="tech-item"><i class="fa-solid fa-server icon"></i>Gunicorn</div>
+            <div class="tech-item"><i class="fa-solid fa-database icon"></i>DynamoDB</div>
+            <div class="tech-item"><i class="fa-brands fa-github icon"></i>CI/CD (GitHub, AWS CodePipeline/CodeBuild)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-list-check icon"></i> Major Functionalities</h2>
+        <ul>
+            <li><b>User Authentication:</b> Secure registration, login, session management, and password strength enforcement.</li>
+            <li><b>Menu Management:</b> View, add, and delete menu items (admin only), with images stored in S3.</li>
+            <li><b>Order Placement:</b> Users can place orders, which are stored in DynamoDB with username and timestamp.</li>
+            <li><b>Order History:</b> Users can view their previous orders in a dedicated history section.</li>
+            <li><b>Admin Panel:</b> Admins can view all orders, update order status, and manage menu items.</li>
+            <li><b>Notifications:</b> Order placement triggers an SNS notification (email/SMS integration possible).</li>
+            <li><b>Error Handling:</b> All routes have robust error handling and user-friendly feedback.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-rocket icon"></i> Deployment & Production</h2>
+        <ul>
+            <li>Production-ready <code>Dockerfile</code> using <b>gunicorn</b> as the WSGI server</li>
+            <li>CI/CD pipeline (AWS CodePipeline/CodeBuild) for automated build, test, and deployment</li>
+            <li>Deployed on AWS ECS (EC2 launch type for free tier)</li>
+            <li>Images stored in AWS ECR (free up to 500MB/month)</li>
+            <li>Environment variables and secrets managed securely</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-shield-halved icon"></i> Security Best Practices</h2>
+        <ul>
+            <li>Strong, random Flask secret key</li>
+            <li>Session management and CSRF protection</li>
+            <li>Input validation and password hashing</li>
+            <li>Minimal IAM permissions for AWS resources</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-laptop-code icon"></i> How to Run Locally</h2>
+        <div class="steps">
+            <ol>
+                <li>Clone the repository</li>
+                <li>Install Docker and run:<br><code>docker build -t restaurant-app .</code></li>
+                <li>Start the container:<br><code>docker run -p 8000:8000 restaurant-app</code></li>
+                <li>Visit <a href="http://localhost:8000">http://localhost:8000</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-cloud-arrow-up icon"></i> How to Deploy on AWS (Summary)</h2>
+        <div class="steps">
+            <ol>
+                <li>Push code to GitHub/CodeCommit</li>
+                <li>Set up AWS ECR and push Docker image</li>
+                <li>Configure ECS cluster (EC2 launch type for free tier)</li>
+                <li>Set up CodePipeline/CodeBuild for CI/CD</li>
+                <li>Access your app via EC2 public IP or load balancer</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="section callout">
+        <b>Tip:</b> For best performance and security, always use environment variables for secrets and configure IAM roles with least privilege.
+    </div>
+
+    <div class="section">
+        <h2><i class="fa-solid fa-circle-info icon"></i> Contact & Support</h2>
+        <p>For questions or support, please contact the project maintainer.</p>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Restaurant App &mdash; Built with Flask, AWS, and Docker.
+    </div>
+</div>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant App - README</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; background: #f9f9f9; color: #222; }
+        h1, h2, h3 { color: #2c3e50; }
+        code, pre { background: #eee; padding: 2px 6px; border-radius: 3px; }
+        ul { margin-bottom: 1.5rem; }
+        .section { margin-bottom: 2.5rem; }
+    </style>
+</head>
+</html>
+
