@@ -30,7 +30,7 @@ def admin_login():
             return redirect(url_for('routes.admin_login'))
         flash('Login successful!', 'success')
         session['admin_logged_in'] = True
-        return redirect(url_for('routes.admin'))
+        return redirect(url_for('routes.admin_panel'))
     return render_template('admin_login.html')
 
 
